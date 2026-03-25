@@ -5,6 +5,7 @@ import { wasteService } from '../../services/wasteService';
 import { useAuth } from '../../context/AuthContext';
 import { formatDate, formatQuantity } from '../../utils/helpers';
 import { ToastContainer, toast } from 'react-toastify';
+import '../../styles/WasteRecords.css';
 
 const WasteRecords = () => {
   const [records, setRecords] = useState([]);
@@ -95,15 +96,15 @@ const WasteRecords = () => {
     <div>
       <ToastContainer position="top-right" autoClose={3000} />
 
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">
+      <h1 className="waste-records-header">
         My Waste Records
       </h1>
 
       {/* Filters */}
-      <div className="bg-white rounded-lg shadow p-4 mb-6">
-        <div className="flex flex-wrap gap-4">
-          <div>
-            <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-1">
+      <div className="waste-records-filters">
+        <div className="waste-records-filters-inner">
+          <div className="waste-records-filter">
+            <label htmlFor="status" className="waste-records-filter-label">
               Status
             </label>
             <select
@@ -111,7 +112,7 @@ const WasteRecords = () => {
               name="status"
               value={filters.status}
               onChange={handleFilterChange}
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-brand-500 focus:border-brand-500 sm:text-sm"
+              className="waste-records-filter-select"
             >
               <option value="">All Statuses</option>
               <option value="PENDING">Pending</option>
@@ -119,8 +120,8 @@ const WasteRecords = () => {
               <option value="DISPOSED">Disposed</option>
             </select>
           </div>
-          <div>
-            <label htmlFor="wasteType" className="block text-sm font-medium text-gray-700 mb-1">
+          <div className="waste-records-filter">
+            <label htmlFor="wasteType" className="waste-records-filter-label">
               Waste Type
             </label>
             <select
@@ -128,7 +129,7 @@ const WasteRecords = () => {
               name="wasteType"
               value={filters.wasteType}
               onChange={handleFilterChange}
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-brand-500 focus:border-brand-500 sm:text-sm"
+              className="waste-records-filter-select"
             >
               <option value="">All Types</option>
               <option value="YELLOW">Yellow</option>
@@ -137,10 +138,10 @@ const WasteRecords = () => {
               <option value="BLUE">Blue</option>
             </select>
           </div>
-          <div className="flex items-end">
+          <div className="waste-records-filter-btn">
             <button
               onClick={() => setFilters({ status: '', wasteType: '' })}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500"
+              className="waste-records-filter-clear"
             >
               Clear Filters
             </button>
@@ -150,8 +151,8 @@ const WasteRecords = () => {
 
       {/* Table */}
       {loading ? (
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-600"></div>
+        <div className="dashboard-loading">
+          <div className="dashboard-spinner"></div>
         </div>
       ) : (
         <DataTable
@@ -162,28 +163,28 @@ const WasteRecords = () => {
       )}
 
       {/* Summary */}
-      <div className="mt-6 bg-white rounded-lg shadow p-4">
-        <h3 className="text-sm font-medium text-gray-700 mb-2">Summary</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+      <div className="waste-records-summary">
+        <h3 className="waste-records-summary-title">Summary</h3>
+        <div className="waste-records-summary-grid">
           <div>
-            <span className="text-gray-500">Total Records:</span>
-            <span className="ml-2 font-semibold">{filteredRecords.length}</span>
+            <span className="waste-records-summary-label">Total Records:</span>
+            <span className="waste-records-summary-value">{filteredRecords.length}</span>
           </div>
           <div>
-            <span className="text-gray-500">Pending:</span>
-            <span className="ml-2 font-semibold text-yellow-600">
+            <span className="waste-records-summary-label">Pending:</span>
+            <span className="waste-records-summary-value waste-records-summary-pending">
               {filteredRecords.filter(r => r.status === 'PENDING').length}
             </span>
           </div>
           <div>
-            <span className="text-gray-500">Collected:</span>
-            <span className="ml-2 font-semibold text-blue-600">
+            <span className="waste-records-summary-label">Collected:</span>
+            <span className="waste-records-summary-value waste-records-summary-collected">
               {filteredRecords.filter(r => r.status === 'COLLECTED').length}
             </span>
           </div>
           <div>
-            <span className="text-gray-500">Disposed:</span>
-            <span className="ml-2 font-semibold text-green-600">
+            <span className="waste-records-summary-label">Disposed:</span>
+            <span className="waste-records-summary-value waste-records-summary-disposed">
               {filteredRecords.filter(r => r.status === 'DISPOSED').length}
             </span>
           </div>

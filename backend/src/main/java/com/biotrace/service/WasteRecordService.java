@@ -3,6 +3,7 @@ package com.biotrace.service;
 import com.biotrace.dto.request.WasteRecordRequest;
 import com.biotrace.enums.Priority;
 import com.biotrace.enums.RequestStatus;
+import com.biotrace.enums.UserRole;
 import com.biotrace.enums.WasteStatus;
 import com.biotrace.exception.ResourceNotFoundException;
 import com.biotrace.model.CollectionRequest;
@@ -52,6 +53,17 @@ public class WasteRecordService {
     }
 
     public List<WasteRecord> getAllWasteRecords(User currentUser) {
+        // If currentUser is null (for admin/agency) or ADMIN role, return all records
+        if (currentUser == null || currentUser.getRole() == UserRole.ADMIN || currentUser.getRole() == UserRole.COLLECTION_AGENCY) {
+            return wasteRecordRepository.findAll();
+        }
+        
+        // For hospital staff, return only their hospital's records
+        if (currentUser.getRole() == UserRole.HOSPITAL_STAFF && currentUser.getHospitalId() != null) {
+            return wasteRecordRepository.findByHospitalId(currentUser.getHospitalId());
+        }
+        
+        // Default: return all (shouldn't reach here normally)
         return wasteRecordRepository.findAll();
     }
 

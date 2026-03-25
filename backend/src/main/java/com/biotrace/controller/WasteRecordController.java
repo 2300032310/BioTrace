@@ -14,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -99,18 +100,34 @@ public class WasteRecordController {
             User currentUser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
             
-            // Simple stats for now
             List<WasteRecord> allRecords = wasteRecordService.getAllWasteRecords(currentUser);
             
+            long totalRecords = allRecords.size();
+            long pendingCount = allRecords.stream()
+                .filter(w -> w.getStatus() == WasteStatus.PENDING).count();
+            long disposedCount = allRecords.stream()
+                .filter(w -> w.getStatus() == WasteStatus.DISPOSED).count();
+            
+            // Calculate total waste quantity this month (in kg)
+            LocalDateTime startOfMonth = LocalDateTime.now().withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0);
+            double totalWasteThisMonth = allRecords.stream()
+                .filter(w -> w.getCreatedAt() != null && w.getCreatedAt().isAfter(startOfMonth))
+                .filter(w -> w.getQuantityKg() != null)
+                .mapToDouble(w -> w.getQuantityKg().doubleValue()) // Convert BigDecimal to double
+                .sum();
+            
+            // Calculate compliance rate
+            int complianceRate = totalRecords > 0 ? (int) ((disposedCount * 100) / totalRecords) : 100;
+            
             Map<String, Object> stats = new HashMap<>();
-            stats.put("totalWaste", allRecords.size());
-            stats.put("pendingCollections", allRecords.stream()
-                .filter(w -> w.getStatus() == WasteStatus.PENDING).count());
-            stats.put("completedCollections", allRecords.stream()
-                .filter(w -> w.getStatus() == WasteStatus.DISPOSED).count());
+            stats.put("totalWasteThisMonth", Math.round(totalWasteThisMonth * 100.0) / 100.0);
+            stats.put("pendingCollections", pendingCount);
+            stats.put("complianceRate", complianceRate);
+            stats.put("totalRecords", totalRecords);
             
             return ResponseEntity.ok().body(stats);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
     }

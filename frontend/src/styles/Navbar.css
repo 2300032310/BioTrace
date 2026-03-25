@@ -1,0 +1,415 @@
+/* Navbar.css - Biotech Theme for BioTrace */
+
+.navbar {
+  background: linear-gradient(135deg, #0B4F6C 0%, #146C94 50%, #19A7CE 100%);
+  box-shadow: 0 4px 20px rgba(11, 79, 108, 0.25);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.navbar-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.navbar-inner {
+  display: flex;
+  justify-content: space-between;
+  height: 4.5rem;
+  align-items: center;
+}
+
+/* Brand Section */
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.flex-shrink-0 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.navbar-logo {
+  height: 2.5rem;
+  width: 2.5rem;
+  color: white;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+  animation: pulse 3s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.05);
+  }
+}
+
+.navbar-title {
+  margin-left: 0.5rem;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: white;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #FFFFFF, #E3F0F5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+}
+
+.navbar-title::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #19A7CE, #9B72AA, #19A7CE);
+  border-radius: 2px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.navbar-brand:hover .navbar-title::after {
+  transform: scaleX(1);
+}
+
+/* Actions Section */
+.navbar-actions {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-user {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.5rem 0;
+}
+
+/* User Info */
+.text-white {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+
+.navbar-user-name {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: white;
+  letter-spacing: 0.02em;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+  display: inline-block;
+}
+
+.navbar-user-name::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -1.5rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: #2D9A7A;
+  border-radius: 50%;
+  transform: translateY(-50%);
+  box-shadow: 0 0 0 2px rgba(45, 154, 122, 0.3);
+  animation: statusPulse 2s infinite;
+}
+
+@keyframes statusPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 2px rgba(45, 154, 122, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(45, 154, 122, 0.2);
+  }
+}
+
+.navbar-user-role {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.15);
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  letter-spacing: 0.03em;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.2s ease;
+}
+
+.navbar-user-role:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+/* Logout Button */
+.navbar-logout {
+  margin-left: 0.5rem;
+  padding: 0.5rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #0B4F6C;
+  background: white;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navbar-logout::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
+  transition: left 0.5s ease;
+  z-index: 1;
+}
+
+.navbar-logout::after {
+  content: '→';
+  position: relative;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: all 0.3s ease;
+  font-size: 1.125rem;
+  line-height: 1;
+}
+
+.navbar-logout:hover {
+  background: linear-gradient(135deg, #FFFFFF, #F0F9FF);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  color: #19A7CE;
+  padding-right: 2rem;
+}
+
+.navbar-logout:hover::before {
+  left: 100%;
+}
+
+.navbar-logout:hover::after {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.navbar-logout:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.navbar-logout:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3), 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .navbar-container {
+    padding: 0 1rem;
+  }
+
+  .navbar-inner {
+    height: 4rem;
+  }
+
+  .navbar-logo {
+    height: 2rem;
+    width: 2rem;
+  }
+
+  .navbar-title {
+    font-size: 1.25rem;
+  }
+
+  .navbar-user {
+    gap: 1rem;
+  }
+
+  .navbar-user-name {
+    font-size: 0.8125rem;
+  }
+
+  .navbar-user-name::before {
+    left: -1rem;
+    width: 0.375rem;
+    height: 0.375rem;
+  }
+
+  .navbar-user-role {
+    font-size: 0.6875rem;
+    padding: 0.125rem 0.5rem;
+  }
+
+  .navbar-logout {
+    padding: 0.375rem 1rem;
+    font-size: 0.75rem;
+  }
+
+  .navbar-logout::after {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar-user-name {
+    display: none;
+  }
+
+  .navbar-user-name::before {
+    display: none;
+  }
+
+  .navbar-title {
+    font-size: 1.125rem;
+  }
+
+  .navbar-logout {
+    padding: 0.375rem 0.875rem;
+  }
+}
+
+/* Loading state for user info */
+.navbar-user.loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.navbar-user.loading .navbar-user-name {
+  background: linear-gradient(90deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1));
+  border-radius: 4px;
+  color: transparent;
+  animation: loadingPulse 1.5s infinite;
+}
+
+.navbar-user.loading .navbar-user-role {
+  background: linear-gradient(90deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+  color: transparent;
+  animation: loadingPulse 1.5s infinite;
+}
+
+@keyframes loadingPulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+/* Hover effects for brand */
+.navbar-brand {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.navbar-brand:hover {
+  transform: scale(1.02);
+}
+
+.navbar-brand:active {
+  transform: scale(0.98);
+}
+
+/* Custom focus styles for accessibility */
+.navbar button:focus-visible,
+.navbar-brand:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Glass effect on hover for user info */
+.text-white {
+  transition: all 0.2s ease;
+}
+
+.text-white:hover {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  margin: -0.5rem -1rem;
+}
+
+/* Animated gradient background */
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.navbar {
+  background: linear-gradient(270deg, #0B4F6C, #146C94, #19A7CE, #9B72AA);
+  background-size: 300% 100%;
+  animation: gradientShift 15s ease infinite;
+}
+
+/* Notification badge (if you add notifications later) */
+.navbar-notification-badge {
+  position: relative;
+  margin-right: 1rem;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.navbar-notification-badge:hover {
+  transform: scale(1.1);
+}
+
+.navbar-notification-badge::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  background: #D45C5C;
+  border-radius: 50%;
+  border: 2px solid white;
+  animation: notificationPulse 2s infinite;
+}
+
+@keyframes notificationPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+}

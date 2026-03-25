@@ -2,6 +2,38 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* Biotech Premium Color Palette */
+  --primary-deep-teal: #0B4F6C;
+  --primary-bio-cyan: #19A7CE;
+  --primary-soft-purple: #9B72AA;
+  --primary-dark: #0A3847;
+  --primary-light: #E3F0F5;
+  
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #0B4F6C, #146C94);
+  --gradient-accent: linear-gradient(145deg, #19A7CE, #9B72AA);
+  --gradient-cyber: linear-gradient(125deg, #0B4F6C, #19A7CE);
+  
+  /* Neutrals */
+  --bg-off-white: #F8FAFC;
+  --bg-cool-gray: #E9EEF2;
+  --border-light: #DCE5EB;
+  --text-primary: #13293D;
+  --text-secondary: #3F5468;
+  --text-muted: #647B8C;
+  
+  /* Status colors */
+  --success: #2D9A7A;
+  --warning: #E6B657;
+  --error: #D45C5C;
+  --info: #4A90E2;
+  
+  /* Glass effect */
+  --glass-bg: rgba(255, 255, 255, 0.95);
+  --glass-border: rgba(11, 79, 108, 0.08);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -14,7 +46,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f9fafb;
+  background: linear-gradient(135deg, #F8FAFC 0%, #E9EEF2 100%);
+  color: var(--text-primary);
 }
 
 /* Custom scrollbar */
@@ -24,35 +57,15 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: var(--bg-cool-gray);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #888;
+  background: linear-gradient(135deg, var(--primary-deep-teal), var(--primary-bio-cyan));
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-
-/* Waste type colors */
-.waste-yellow {
-  background-color: #FCD34D;
-  color: #92400E;
-}
-
-.waste-red {
-  background-color: #EF4444;
-  color: white;
-}
-
-.waste-white {
-  background-color: #F3F4F6;
-  color: #374151;
-}
-
-.waste-blue {
-  background-color: #3B82F6;
-  color: white;
+  background: var(--primary-deep-teal);
 }

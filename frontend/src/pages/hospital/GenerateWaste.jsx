@@ -1,8 +1,9 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { wasteService } from '../../services/wasteService';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import '../../styles/GenerateWaste.css';
 
 export default function GenerateWaste() {
   const { user } = useAuth();
@@ -71,28 +72,31 @@ export default function GenerateWaste() {
   };
 
   const wasteTypes = [
-    { value: 'YELLOW', label: 'Yellow (Infectious)', color: 'bg-yellow-100 border-yellow-500' },
-    { value: 'RED', label: 'Red (Contaminated Plastic)', color: 'bg-red-100 border-red-500' },
-    { value: 'WHITE', label: 'White (Sharp Objects)', color: 'bg-gray-100 border-gray-500' },
-    { value: 'BLUE', label: 'Blue (Glassware)', color: 'bg-blue-100 border-blue-500' }
+    { value: 'YELLOW', label: 'Yellow (Infectious)', color: 'waste-type-yellow' },
+    { value: 'RED', label: 'Red (Contaminated Plastic)', color: 'waste-type-red' },
+    { value: 'WHITE', label: 'White (Sharp Objects)', color: 'waste-type-white' },
+    { value: 'BLUE', label: 'Blue (Glassware)', color: 'waste-type-blue' }
   ];
 
   const departments = ['ICU', 'OPD', 'Surgery', 'Lab', 'Emergency', 'Pharmacy', 'Radiology'];
 
+  const getWasteTypeClass = () => {
+    const wasteType = wasteTypes.find(w => w.value === formData.wasteType);
+    return wasteType ? wasteType.color : '';
+  };
+
   return (
-    <div className="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow">
-      <h2 className="text-2xl font-bold mb-6">Generate Waste Record</h2>
+    <div className="generate-waste-container">
+      <h2 className="generate-waste-title">Generate Waste Record</h2>
       
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium mb-2">Waste Type</label>
+      <form onSubmit={handleSubmit} className="generate-waste-form">
+        <div className="generate-waste-field">
+          <label className="generate-waste-label">Waste Type</label>
           <select
             name="wasteType"
             value={formData.wasteType}
             onChange={handleChange}
-            className={`w-full p-2 border-2 rounded ${
-              wasteTypes.find(w => w.value === formData.wasteType)?.color
-            }`}
+            className={`generate-waste-select ${getWasteTypeClass()}`}
             required
           >
             {wasteTypes.map(type => (
@@ -101,8 +105,8 @@ export default function GenerateWaste() {
           </select>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium mb-2">Quantity (kg)</label>
+        <div className="generate-waste-field">
+          <label className="generate-waste-label">Quantity (kg)</label>
           <input
             type="number"
             name="quantityKg"
@@ -110,19 +114,19 @@ export default function GenerateWaste() {
             onChange={handleChange}
             step="0.01"
             min="0.01"
-            className="w-full p-2 border rounded"
+            className="generate-waste-input"
             placeholder="Enter quantity in kg"
             required
           />
         </div>
 
-        <div>
-          <label className="block text-sm font-medium mb-2">Department</label>
+        <div className="generate-waste-field">
+          <label className="generate-waste-label">Department</label>
           <select
             name="department"
             value={formData.department}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            className="generate-waste-select"
             required
           >
             {departments.map(dept => (
@@ -131,27 +135,27 @@ export default function GenerateWaste() {
           </select>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium mb-2">Generation Date</label>
+        <div className="generate-waste-row">
+          <div className="generate-waste-field">
+            <label className="generate-waste-label">Generation Date</label>
             <input
               type="date"
               name="generationDate"
               value={formData.generationDate}
               onChange={handleChange}
-              className="w-full p-2 border rounded"
+              className="generate-waste-input"
               required
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-2">Generation Time</label>
+          <div className="generate-waste-field">
+            <label className="generate-waste-label">Generation Time</label>
             <input
               type="time"
               name="generationTime"
               value={formData.generationTime}
               onChange={handleChange}
-              className="w-full p-2 border rounded"
+              className="generate-waste-input"
               required
             />
           </div>
@@ -159,7 +163,7 @@ export default function GenerateWaste() {
 
         <button
           type="submit"
-          className="w-full bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition"
+          className="generate-waste-submit"
         >
           Create Waste Record
         </button>

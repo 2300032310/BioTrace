@@ -4,6 +4,7 @@ import StatusBadge from '../../components/StatusBadge';
 import { wasteService } from '../../services/wasteService';
 import { formatDate, getTimeElapsed, isViolation } from '../../utils/helpers';
 import { ToastContainer, toast } from 'react-toastify';
+import '../../styles/ComplianceMonitor.css';
 
 const ComplianceMonitor = () => {
   const [wasteRecords, setWasteRecords] = useState([]);
@@ -16,17 +17,17 @@ const ComplianceMonitor = () => {
   }, []);
 
   const fetchWasteRecords = async () => {
-  try {
-    const data = await wasteService.getAllWaste();
-    setWasteRecords(Array.isArray(data) ? data : []);
-  } catch (error) {
-    console.error('Error fetching waste records:', error);
-    toast.error('Failed to fetch waste records.');
-    setWasteRecords([]); // Set empty array on error
-  } finally {
-    setLoading(false);
-  }
-};
+    try {
+      const data = await wasteService.getAllWaste();
+      setWasteRecords(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.error('Error fetching waste records:', error);
+      toast.error('Failed to fetch waste records.');
+      setWasteRecords([]); // Set empty array on error
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const filteredRecords = wasteRecords.filter((record) => {
     if (filterHospital && record.hospitalId?.toString() !== filterHospital) return false;
@@ -65,12 +66,12 @@ const ComplianceMonitor = () => {
         const elapsed = getTimeElapsed(value);
         const violation = isViolation(value);
         return (
-          <div className="flex items-center gap-2">
-            <span className={violation ? 'text-red-600 font-medium' : 'text-gray-600'}>
+          <div className="time-elapsed">
+            <span className={violation ? 'time-elapsed-value time-elapsed-value-violation' : 'time-elapsed-value time-elapsed-value-normal'}>
               {elapsed}
             </span>
             {violation && (
-              <span className="px-2 py-0.5 text-xs rounded-full bg-red-100 text-red-800">
+              <span className="time-elapsed-badge">
                 VIOLATION
               </span>
             )}
@@ -94,62 +95,62 @@ const ComplianceMonitor = () => {
     <div>
       <ToastContainer position="top-right" autoClose={3000} />
       
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">
+      <h1 className="compliance-header">
         Compliance Monitor
       </h1>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-        <div className="bg-white rounded-lg shadow p-6">
-          <p className="text-sm font-medium text-gray-500">Total Records</p>
-          <p className="text-2xl font-semibold text-gray-900">{wasteRecords.length}</p>
+      <div className="compliance-stats">
+        <div className="compliance-stat-card">
+          <p className="compliance-stat-label">Total Records</p>
+          <p className="compliance-stat-value">{wasteRecords.length}</p>
         </div>
-        <div className="bg-white rounded-lg shadow p-6">
-          <p className="text-sm font-medium text-gray-500">Violations (&gt;48hrs)</p>
-          <p className="text-2xl font-semibold text-red-600">{violations.length}</p>
+        <div className="compliance-stat-card">
+          <p className="compliance-stat-label">Violations (&gt;48hrs)</p>
+          <p className="compliance-stat-value compliance-stat-value-red">{violations.length}</p>
         </div>
-        <div className="bg-white rounded-lg shadow p-6">
-          <p className="text-sm font-medium text-gray-500">Compliance Rate</p>
-          <p className="text-2xl font-semibold text-green-600">{complianceRate}%</p>
+        <div className="compliance-stat-card">
+          <p className="compliance-stat-label">Compliance Rate</p>
+          <p className="compliance-stat-value compliance-stat-value-green">{complianceRate}%</p>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-lg shadow p-4 mb-6">
-        <div className="flex flex-wrap gap-4">
-          <div>
-            <label htmlFor="filterHospital" className="block text-sm font-medium text-gray-700 mb-1">
+      <div className="compliance-filters">
+        <div className="compliance-filters-inner">
+          <div className="compliance-filter">
+            <label htmlFor="filterHospital" className="compliance-filter-label">
               Hospital
             </label>
             <select
               id="filterHospital"
               value={filterHospital}
               onChange={(e) => setFilterHospital(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-brand-500 focus:border-brand-500 sm:text-sm"
+              className="compliance-filter-select"
             >
               <option value="">All Hospitals</option>
               {/* Add hospital options here */}
             </select>
           </div>
-          <div>
-            <label htmlFor="filterViolation" className="block text-sm font-medium text-gray-700 mb-1">
+          <div className="compliance-filter">
+            <label htmlFor="filterViolation" className="compliance-filter-label">
               Compliance Status
             </label>
             <select
               id="filterViolation"
               value={filterViolation}
               onChange={(e) => setFilterViolation(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-brand-500 focus:border-brand-500 sm:text-sm"
+              className="compliance-filter-select"
             >
               <option value="">All</option>
               <option value="violation">Violations Only</option>
               <option value="compliant">Compliant Only</option>
             </select>
           </div>
-          <div className="flex items-end">
+          <div className="compliance-filter-btn">
             <button
               onClick={() => setFilterHospital('') || setFilterViolation('')}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500"
+              className="compliance-filter-clear"
             >
               Clear Filters
             </button>
@@ -159,8 +160,8 @@ const ComplianceMonitor = () => {
 
       {/* Table */}
       {loading ? (
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-600"></div>
+        <div className="dashboard-loading">
+          <div className="dashboard-spinner"></div>
         </div>
       ) : (
         <DataTable
@@ -171,12 +172,12 @@ const ComplianceMonitor = () => {
       )}
 
       {/* Legend */}
-      <div className="mt-6 bg-white rounded-lg shadow p-4">
-        <h3 className="text-sm font-medium text-gray-700 mb-2">Legend</h3>
-        <div className="flex gap-4 text-sm">
-          <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 text-xs rounded-full bg-red-100 text-red-800">VIOLATION</span>
-            <span className="text-gray-500">Waste pending for more than 48 hours</span>
+      <div className="compliance-legend">
+        <h3 className="compliance-legend-title">Legend</h3>
+        <div className="compliance-legend-items">
+          <div className="compliance-legend-item">
+            <span className="compliance-legend-badge">VIOLATION</span>
+            <span className="compliance-legend-text">Waste pending for more than 48 hours</span>
           </div>
         </div>
       </div>

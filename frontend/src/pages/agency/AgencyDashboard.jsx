@@ -5,6 +5,10 @@ import PickupRequests from './PickupRequests';
 import MyCollections from './MyCollections';
 import collectionService from '../../services/collectionService';
 import { ToastContainer, toast } from 'react-toastify';
+import '../../styles/Dashboard.css';
+import '../../styles/PickupRequests.css';
+import '../../styles/MyCollections.css';
+import '../../styles/Icons.css';
 
 const AgencyDashboard = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -36,26 +40,22 @@ const AgencyDashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="dashboard-page">
       <Navbar />
-      <div className="flex">
+      <div className="dashboard-content">
         <Sidebar />
-        <div className="flex-1 p-8">
+        <div className="dashboard-main">
           <ToastContainer position="top-right" autoClose={3000} />
           
           {/* Tabs */}
-          <div className="mb-6">
-            <div className="border-b border-gray-200">
-              <nav className="-mb-px flex space-x-8">
+          <div className="dashboard-tabs">
+            <div className="dashboard-tabs-border">
+              <nav className="dashboard-tabs-nav">
                 {tabs.map((tab) => (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`${
-                      activeTab === tab.id
-                        ? 'border-brand-500 text-brand-600'
-                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                    } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
+                    className={activeTab === tab.id ? 'dashboard-tab dashboard-tab-active' : 'dashboard-tab'}
                   >
                     {tab.label}
                   </button>
@@ -67,57 +67,57 @@ const AgencyDashboard = () => {
           {/* Content */}
           {activeTab === 'dashboard' && (
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 mb-6">
+              <h1 className="dashboard-header">
                 Collection Agency Dashboard
               </h1>
               
               {loading ? (
-                <div className="flex justify-center items-center h-64">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-600"></div>
+                <div className="dashboard-loading">
+                  <div className="dashboard-spinner"></div>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="dashboard-stats dashboard-stats-3">
                   {/* Pending Pickups Today */}
-                  <div className="bg-white rounded-lg shadow p-6">
-                    <div className="flex items-center">
-                      <div className="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                  <div className="stat-card">
+                    <div className="stat-card-inner">
+                      <div className="stat-card-icon stat-card-icon-yellow">
                         <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                       </div>
-                      <div className="ml-4">
-                        <p className="text-sm font-medium text-gray-500">Pending Pickups Today</p>
-                        <p className="text-2xl font-semibold text-gray-900">{stats.pendingPickupsToday}</p>
+                      <div className="stat-card-content">
+                        <p className="stat-card-label">Pending Pickups Today</p>
+                        <p className="stat-card-value">{stats.pendingPickupsToday || 0}</p>
                       </div>
                     </div>
                   </div>
 
                   {/* Completed This Week */}
-                  <div className="bg-white rounded-lg shadow p-6">
-                    <div className="flex items-center">
-                      <div className="p-3 rounded-full bg-green-100 text-green-600">
+                  <div className="stat-card">
+                    <div className="stat-card-inner">
+                      <div className="stat-card-icon stat-card-icon-green">
                         <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                       </div>
-                      <div className="ml-4">
-                        <p className="text-sm font-medium text-gray-500">Completed This Week</p>
-                        <p className="text-2xl font-semibold text-gray-900">{stats.completedThisWeek}</p>
+                      <div className="stat-card-content">
+                        <p className="stat-card-label">Completed This Week</p>
+                        <p className="stat-card-value">{stats.completedThisWeek || 0}</p>
                       </div>
                     </div>
                   </div>
 
                   {/* Total Waste Collected */}
-                  <div className="bg-white rounded-lg shadow p-6">
-                    <div className="flex items-center">
-                      <div className="p-3 rounded-full bg-brand-100 text-brand-600">
+                  <div className="stat-card">
+                    <div className="stat-card-inner">
+                      <div className="stat-card-icon stat-card-icon-brand">
                         <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                         </svg>
                       </div>
-                      <div className="ml-4">
-                        <p className="text-sm font-medium text-gray-500">Total Waste Collected</p>
-                        <p className="text-2xl font-semibold text-gray-900">{stats.totalWasteCollected} kg</p>
+                      <div className="stat-card-content">
+                        <p className="stat-card-label">Total Waste Collected</p>
+                        <p className="stat-card-value">{stats.totalWasteCollected || 0} kg</p>
                       </div>
                     </div>
                   </div>
@@ -125,30 +125,30 @@ const AgencyDashboard = () => {
               )}
 
               {/* Quick Actions */}
-              <div className="mt-8">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="dashboard-actions">
+                <h2 className="dashboard-actions-title">Quick Actions</h2>
+                <div className="dashboard-actions-grid">
                   <button
                     onClick={() => setActiveTab('pickups')}
-                    className="flex items-center p-4 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
+                    className="action-button"
                   >
-                    <div className="p-2 rounded-full bg-yellow-100 text-yellow-600 mr-4">
+                    <div className="action-button-icon action-button-icon-yellow">
                       <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                       </svg>
                     </div>
-                    <span className="font-medium text-gray-900">View Pickup Requests</span>
+                    <span className="action-button-text">View Pickup Requests</span>
                   </button>
                   <button
                     onClick={() => setActiveTab('collections')}
-                    className="flex items-center p-4 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
+                    className="action-button"
                   >
-                    <div className="p-2 rounded-full bg-blue-100 text-blue-600 mr-4">
+                    <div className="action-button-icon action-button-icon-blue">
                       <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
                       </svg>
                     </div>
-                    <span className="font-medium text-gray-900">My Collections</span>
+                    <span className="action-button-text">My Collections</span>
                   </button>
                 </div>
               </div>

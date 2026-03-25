@@ -6,6 +6,7 @@ import { disposalService } from '../../services/disposalService';
 import { useAuth } from '../../context/AuthContext';
 import { formatDateTime, formatQuantity, DISPOSAL_METHODS } from '../../utils/helpers';
 import { ToastContainer, toast } from 'react-toastify';
+import '../../styles/MyCollections.css';
 
 const MyCollections = () => {
   const [collections, setCollections] = useState([]);
@@ -115,7 +116,7 @@ const MyCollections = () => {
       render: (_, record) => (
         <button
           onClick={() => handleLogDisposal(record)}
-          className="px-3 py-1 text-xs font-medium text-white bg-brand-600 rounded hover:bg-brand-700"
+          className="disposal-btn"
         >
           Log Disposal
         </button>
@@ -127,13 +128,13 @@ const MyCollections = () => {
     <div>
       <ToastContainer position="top-right" autoClose={3000} />
       
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">
+      <h1 className="my-collections-header">
         My Collections (Ready for Disposal)
       </h1>
 
       {loading ? (
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-600"></div>
+        <div className="dashboard-loading">
+          <div className="dashboard-spinner"></div>
         </div>
       ) : (
         <DataTable
@@ -145,32 +146,32 @@ const MyCollections = () => {
 
       {/* Disposal Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2 className="modal-title">
               Log Disposal
             </h2>
-            <form onSubmit={handleSubmitDisposal} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+            <form onSubmit={handleSubmitDisposal} className="modal-form">
+              <div className="modal-field">
+                <label className="modal-label">
                   Waste Type
                 </label>
-                <div className="px-3 py-2 bg-gray-100 rounded-md">
+                <div className="modal-field-readonly">
                   {selectedCollection?.wasteType}
                 </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+              <div className="modal-field">
+                <label className="modal-label">
                   Quantity (kg)
                 </label>
-                <div className="px-3 py-2 bg-gray-100 rounded-md">
+                <div className="modal-field-readonly">
                   {formatQuantity(selectedCollection?.quantityKg)}
                 </div>
               </div>
 
-              <div>
-                <label htmlFor="disposalMethod" className="block text-sm font-medium text-gray-700">
+              <div className="modal-field">
+                <label htmlFor="disposalMethod" className="modal-label">
                   Disposal Method
                 </label>
                 <select
@@ -178,7 +179,7 @@ const MyCollections = () => {
                   name="disposalMethod"
                   value={disposalForm.disposalMethod}
                   onChange={handleDisposalChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brand-500 focus:border-brand-500 sm:text-sm"
+                  className="modal-select"
                 >
                   {DISPOSAL_METHODS.map((method) => (
                     <option key={method} value={method}>{method}</option>
@@ -186,8 +187,8 @@ const MyCollections = () => {
                 </select>
               </div>
 
-              <div>
-                <label htmlFor="disposalFacility" className="block text-sm font-medium text-gray-700">
+              <div className="modal-field">
+                <label htmlFor="disposalFacility" className="modal-label">
                   Disposal Facility
                 </label>
                 <input
@@ -197,14 +198,14 @@ const MyCollections = () => {
                   required
                   value={disposalForm.disposalFacility}
                   onChange={handleDisposalChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brand-500 focus:border-brand-500 sm:text-sm"
+                  className="modal-input"
                   placeholder="Enter facility name"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label htmlFor="disposalDate" className="block text-sm font-medium text-gray-700">
+              <div className="modal-row">
+                <div className="modal-field">
+                  <label htmlFor="disposalDate" className="modal-label">
                     Disposal Date
                   </label>
                   <input
@@ -214,11 +215,11 @@ const MyCollections = () => {
                     required
                     value={disposalForm.disposalDate}
                     onChange={handleDisposalChange}
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brand-500 focus:border-brand-500 sm:text-sm"
+                    className="modal-input"
                   />
                 </div>
-                <div>
-                  <label htmlFor="disposalTime" className="block text-sm font-medium text-gray-700">
+                <div className="modal-field">
+                  <label htmlFor="disposalTime" className="modal-label">
                     Disposal Time
                   </label>
                   <input
@@ -228,23 +229,23 @@ const MyCollections = () => {
                     required
                     value={disposalForm.disposalTime}
                     onChange={handleDisposalChange}
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brand-500 focus:border-brand-500 sm:text-sm"
+                    className="modal-input"
                   />
                 </div>
               </div>
 
-              <div className="flex justify-end gap-3 mt-6">
+              <div className="modal-actions">
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500"
+                  className="modal-btn modal-btn-cancel"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-4 py-2 text-sm font-medium text-white bg-brand-600 rounded-md hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 disabled:opacity-50"
+                  className="modal-btn modal-btn-submit"
                 >
                   {submitting ? 'Submitting...' : 'Submit'}
                 </button>

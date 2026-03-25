@@ -1,0 +1,205 @@
+/* Icons.css - Biotech Theme for BioTrace */
+
+/* Base icon styles */
+.icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  display: inline-block;
+  vertical-align: middle;
+  transition: all 0.2s ease;
+}
+
+/* Icon sizes */
+.icon-sm {
+  width: 1rem;
+  height: 1rem;
+}
+
+.icon-md {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.icon-lg {
+  width: 2rem;
+  height: 2rem;
+}
+
+.icon-xl {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+/* Icon colors */
+.icon-primary {
+  color: #0B4F6C;
+}
+
+.icon-secondary {
+  color: #19A7CE;
+}
+
+.icon-accent {
+  color: #9B72AA;
+}
+
+.icon-success {
+  color: #2D9A7A;
+}
+
+.icon-warning {
+  color: #E6B657;
+}
+
+.icon-error {
+  color: #D45C5C;
+}
+
+.icon-white {
+  color: #FFFFFF;
+}
+
+/* Icon hover effects */
+.icon-hover-primary:hover {
+  color: #0B4F6C;
+  transform: scale(1.1);
+  filter: drop-shadow(0 4px 8px rgba(11, 79, 108, 0.3));
+}
+
+.icon-hover-secondary:hover {
+  color: #19A7CE;
+  transform: scale(1.1);
+  filter: drop-shadow(0 4px 8px rgba(25, 167, 206, 0.3));
+}
+
+.icon-hover-accent:hover {
+  color: #9B72AA;
+  transform: scale(1.1);
+  filter: drop-shadow(0 4px 8px rgba(155, 114, 170, 0.3));
+}
+
+/* Icon animations */
+.icon-spin {
+  animation: iconSpin 2s linear infinite;
+}
+
+@keyframes iconSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.icon-pulse {
+  animation: iconPulse 2s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+.icon-bounce {
+  animation: iconBounce 2s ease infinite;
+}
+
+@keyframes iconBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* Icon backgrounds */
+.icon-bg {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-bg-primary {
+  background: linear-gradient(135deg, rgba(11, 79, 108, 0.1), rgba(25, 167, 206, 0.1));
+}
+
+.icon-bg-secondary {
+  background: linear-gradient(135deg, rgba(25, 167, 206, 0.1), rgba(155, 114, 170, 0.1));
+}
+
+.icon-bg-white {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(4px);
+}
+
+/* Icon with badge */
+.icon-badge {
+  position: relative;
+}
+
+.icon-badge::after {
+  content: attr(data-badge);
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  background: #D45C5C;
+  color: white;
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+}
+
+/* Icon groups */
+.icon-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.icon-group-vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Icon with text */
+.icon-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.icon-text-left {
+  flex-direction: row-reverse;
+}
+
+/* Responsive icons */
+@media (max-width: 768px) {
+  .icon-lg {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+  
+  .icon-xl {
+    width: 2rem;
+    height: 2rem;
+  }
+}

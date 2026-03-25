@@ -35,35 +35,38 @@ export const formatDateTime = (dateTimeString) => {
 // Get waste type color
 export const getWasteTypeColor = (type) => {
   const colors = {
-    YELLOW: 'bg-yellow-400 text-yellow-900',
-    RED: 'bg-red-500 text-white',
-    WHITE: 'bg-gray-100 text-gray-800',
-    BLUE: 'bg-blue-500 text-white',
+    YELLOW: 'waste-type-yellow',
+    RED: 'waste-type-red',
+    WHITE: 'waste-type-white',
+    BLUE: 'waste-type-blue',
   };
-  return colors[type] || 'bg-gray-400 text-white';
+  return colors[type] || 'status-default';
 };
 
 // Get status color
 export const getStatusColor = (status) => {
   const colors = {
-    PENDING: 'bg-yellow-100 text-yellow-800',
-    COLLECTED: 'bg-blue-100 text-blue-800',
-    DISPOSED: 'bg-green-100 text-green-800',
-    SCHEDULED: 'bg-purple-100 text-purple-800',
-    COMPLETED: 'bg-green-100 text-green-800',
-    URGENT: 'bg-red-100 text-red-800',
-    NORMAL: 'bg-gray-100 text-gray-800',
+    PENDING: 'status-pending',
+    COLLECTED: 'status-collected',
+    DISPOSED: 'status-disposed',
+    SCHEDULED: 'status-scheduled',
+    COMPLETED: 'status-completed',
+    URGENT: 'priority-high',
+    NORMAL: 'priority-low',
   };
-  return colors[status] || 'bg-gray-100 text-gray-800';
+  return colors[status] || 'status-default';
 };
 
 // Get priority color
 export const getPriorityColor = (priority) => {
   const colors = {
-    URGENT: 'bg-red-500 text-white',
-    NORMAL: 'bg-gray-400 text-white',
+    URGENT: 'priority-high',
+    NORMAL: 'priority-low',
+    HIGH: 'priority-high',
+    MEDIUM: 'priority-medium',
+    LOW: 'priority-low',
   };
-  return colors[priority] || 'bg-gray-400 text-white';
+  return colors[priority] || 'status-default';
 };
 
 // Calculate time elapsed

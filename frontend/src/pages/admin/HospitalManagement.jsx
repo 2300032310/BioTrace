@@ -3,6 +3,7 @@ import DataTable from '../../components/DataTable';
 import hospitalService from '../../services/hospitalService';
 import { formatDate } from '../../utils/helpers';
 import { ToastContainer, toast } from 'react-toastify';
+import '../../styles/HospitalManagement.css';
 
 const HospitalManagement = () => {
   const [hospitals, setHospitals] = useState([]);
@@ -134,16 +135,16 @@ const HospitalManagement = () => {
       key: 'actions',
       header: 'Actions',
       render: (_, record) => (
-        <div className="flex gap-2">
+        <div className="hospital-actions-group">
           <button
             onClick={() => handleEdit(record)}
-            className="px-3 py-1 text-xs font-medium text-white bg-blue-600 rounded hover:bg-blue-700"
+            className="hospital-edit-btn"
           >
             Edit
           </button>
           <button
             onClick={() => handleDelete(record.id)}
-            className="px-3 py-1 text-xs font-medium text-white bg-red-600 rounded hover:bg-red-700"
+            className="hospital-delete-btn"
           >
             Delete
           </button>
@@ -156,21 +157,21 @@ const HospitalManagement = () => {
     <div>
       <ToastContainer position="top-right" autoClose={3000} />
       
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">
+      <div className="hospital-management-header">
+        <h1 className="hospital-management-title">
           Hospital Management
         </h1>
         <button
           onClick={handleAddNew}
-          className="px-4 py-2 text-sm font-medium text-white bg-brand-600 rounded-md hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500"
+          className="hospital-management-add-btn"
         >
           Add Hospital
         </button>
       </div>
 
       {loading ? (
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-600"></div>
+        <div className="dashboard-loading">
+          <div className="dashboard-spinner"></div>
         </div>
       ) : (
         <DataTable
@@ -182,14 +183,14 @@ const HospitalManagement = () => {
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2 className="modal-title">
               {editingHospital ? 'Edit Hospital' : 'Add Hospital'}
             </h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+            <form onSubmit={handleSubmit} className="modal-form">
+              <div className="modal-field">
+                <label htmlFor="name" className="modal-label">
                   Hospital Name *
                 </label>
                 <input
@@ -199,12 +200,12 @@ const HospitalManagement = () => {
                   required
                   value={formData.name}
                   onChange={handleChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brand-500 focus:border-brand-500 sm:text-sm"
+                  className="modal-input"
                 />
               </div>
 
-              <div>
-                <label htmlFor="registrationNumber" className="block text-sm font-medium text-gray-700">
+              <div className="modal-field">
+                <label htmlFor="registrationNumber" className="modal-label">
                   Registration Number *
                 </label>
                 <input
@@ -214,12 +215,12 @@ const HospitalManagement = () => {
                   required
                   value={formData.registrationNumber}
                   onChange={handleChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brand-500 focus:border-brand-500 sm:text-sm"
+                  className="modal-input"
                 />
               </div>
 
-              <div>
-                <label htmlFor="contactPerson" className="block text-sm font-medium text-gray-700">
+              <div className="modal-field">
+                <label htmlFor="contactPerson" className="modal-label">
                   Contact Person
                 </label>
                 <input
@@ -228,12 +229,12 @@ const HospitalManagement = () => {
                   type="text"
                   value={formData.contactPerson}
                   onChange={handleChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brand-500 focus:border-brand-500 sm:text-sm"
+                  className="modal-input"
                 />
               </div>
 
-              <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+              <div className="modal-field">
+                <label htmlFor="phone" className="modal-label">
                   Phone
                 </label>
                 <input
@@ -242,12 +243,12 @@ const HospitalManagement = () => {
                   type="text"
                   value={formData.phone}
                   onChange={handleChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brand-500 focus:border-brand-500 sm:text-sm"
+                  className="modal-input"
                 />
               </div>
 
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <div className="modal-field">
+                <label htmlFor="email" className="modal-label">
                   Email
                 </label>
                 <input
@@ -256,12 +257,12 @@ const HospitalManagement = () => {
                   type="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brand-500 focus:border-brand-500 sm:text-sm"
+                  className="modal-input"
                 />
               </div>
 
-              <div>
-                <label htmlFor="address" className="block text-sm font-medium text-gray-700">
+              <div className="modal-field">
+                <label htmlFor="address" className="modal-label">
                   Address
                 </label>
                 <textarea
@@ -270,22 +271,22 @@ const HospitalManagement = () => {
                   rows={2}
                   value={formData.address}
                   onChange={handleChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brand-500 focus:border-brand-500 sm:text-sm"
+                  className="modal-input"
                 />
               </div>
 
-              <div className="flex justify-end gap-3 mt-6">
+              <div className="modal-actions">
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500"
+                  className="modal-btn modal-btn-cancel"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-4 py-2 text-sm font-medium text-white bg-brand-600 rounded-md hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 disabled:opacity-50"
+                  className="modal-btn modal-btn-submit"
                 >
                   {submitting ? 'Saving...' : 'Save'}
                 </button>

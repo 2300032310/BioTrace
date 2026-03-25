@@ -3,17 +3,12 @@ package com.biotrace.dto.response;
 import com.biotrace.enums.Priority;
 import com.biotrace.enums.RequestStatus;
 import com.biotrace.enums.WasteType;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class CollectionRequestResponse {
+    
     private Long id;
     private Long wasteRecordId;
     private Long hospitalId;
@@ -23,10 +18,13 @@ public class CollectionRequestResponse {
     private LocalDateTime requestedDate;
     private LocalDateTime scheduledPickupDate;
     private Long assignedTo;
-    private String assignedToName;
     private RequestStatus status;
     private Priority priority;
     private LocalDateTime createdAt;
+
+    // Constructors
+    public CollectionRequestResponse() {
+    }
 
     // Getters and Setters
     public Long getId() {
@@ -99,14 +97,6 @@ public class CollectionRequestResponse {
 
     public void setAssignedTo(Long assignedTo) {
         this.assignedTo = assignedTo;
-    }
-
-    public String getAssignedToName() {
-        return assignedToName;
-    }
-
-    public void setAssignedToName(String assignedToName) {
-        this.assignedToName = assignedToName;
     }
 
     public RequestStatus getStatus() {

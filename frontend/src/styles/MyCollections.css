@@ -1,0 +1,808 @@
+/* MyCollections.css - Biotech Theme for BioTrace */
+
+/* Main Container */
+.my-collections {
+  position: relative;
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Header */
+.my-collections-header {
+  font-size: 2rem;
+  font-weight: 800;
+  background: linear-gradient(125deg, #0B4F6C 0%, #19A7CE 50%, #9B72AA 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 2rem;
+  position: relative;
+  display: inline-block;
+  letter-spacing: -0.02em;
+  animation: slideInDown 0.5s ease-out;
+}
+
+.my-collections-header::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #19A7CE, #9B72AA);
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(25, 167, 206, 0.3);
+}
+
+/* Collection Stats (if needed) */
+.collection-stats {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+  .collection-stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.collection-stat-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(11, 79, 108, 0.08);
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+  box-shadow: 0 8px 20px rgba(11, 79, 108, 0.08);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.collection-stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 30px rgba(11, 79, 108, 0.15);
+}
+
+.collection-stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #19A7CE, #9B72AA);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.collection-stat-card:hover::before {
+  opacity: 1;
+}
+
+.collection-stat-icon {
+  padding: 1rem;
+  border-radius: 1rem;
+  display: inline-block;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #E3F0F5, #D1FAE5);
+  color: #0B4F6C;
+}
+
+.collection-stat-icon svg {
+  width: 2rem;
+  height: 2rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.collection-stat-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #3F5468;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.collection-stat-value {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #0B4F6C;
+  line-height: 1.2;
+}
+
+/* Disposal Button */
+.disposal-btn {
+  padding: 0.5rem 1.25rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(135deg, #2D9A7A, #1E7B5E);
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  box-shadow: 0 4px 8px rgba(45, 154, 122, 0.2);
+  min-width: 120px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.disposal-btn::before {
+  content: '🗑️';
+  margin-right: 0.375rem;
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+
+.disposal-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.5s, height 0.5s;
+}
+
+.disposal-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(45, 154, 122, 0.3);
+  background: linear-gradient(135deg, #1E7B5E, #2D9A7A);
+}
+
+.disposal-btn:hover::before {
+  transform: rotate(20deg) scale(1.1);
+}
+
+.disposal-btn:hover::after {
+  width: 200px;
+  height: 200px;
+  opacity: 0;
+}
+
+.disposal-btn:active {
+  transform: translateY(0);
+}
+
+/* Loading State */
+.dashboard-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+  border-radius: 1.5rem;
+  border: 1px solid rgba(11, 79, 108, 0.08);
+  box-shadow: 0 8px 20px rgba(11, 79, 108, 0.08);
+}
+
+.dashboard-spinner {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  border: 3px solid rgba(11, 79, 108, 0.1);
+  border-top-color: #19A7CE;
+  border-right-color: #9B72AA;
+  border-bottom-color: #0B4F6C;
+  animation: spin 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+  box-shadow: 0 0 20px rgba(25, 167, 206, 0.2);
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 79, 108, 0.6);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+  padding: 1rem;
+}
+
+/* Modal Content */
+.modal-content {
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 2rem;
+  box-shadow: 0 30px 60px rgba(11, 79, 108, 0.3);
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.modal-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, #19A7CE, #9B72AA);
+  border-radius: 2rem 2rem 0 0;
+}
+
+.modal-content::after {
+  content: '♻️';
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  font-size: 4rem;
+  opacity: 0.05;
+  transform: rotate(10deg);
+  pointer-events: none;
+}
+
+/* Modal Title */
+.modal-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  background: linear-gradient(125deg, #0B4F6C, #19A7CE);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 2rem;
+  position: relative;
+  display: inline-block;
+  letter-spacing: -0.02em;
+}
+
+.modal-title::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #19A7CE, #9B72AA);
+  border-radius: 3px;
+}
+
+/* Modal Form */
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* Modal Fields */
+.modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.modal-label {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #0B4F6C;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  position: relative;
+  padding-left: 0.75rem;
+}
+
+.modal-label::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 14px;
+  background: linear-gradient(135deg, #19A7CE, #9B72AA);
+  border-radius: 4px;
+}
+
+/* Read-only field */
+.modal-field-readonly {
+  padding: 0.875rem 1.25rem;
+  background: linear-gradient(135deg, #F3F4F6, #E5E7EB);
+  border-radius: 1rem;
+  color: #0B4F6C;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  border: 2px solid transparent;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+  word-break: break-word;
+}
+
+/* Modal Input */
+.modal-input,
+.modal-select {
+  padding: 0.875rem 1.25rem;
+  border: 2px solid #DCE5EB;
+  border-radius: 1rem;
+  font-size: 0.9375rem;
+  color: #13293D;
+  background: white;
+  transition: all 0.3s ease;
+  width: 100%;
+  font-family: inherit;
+}
+
+.modal-input:hover,
+.modal-select:hover {
+  border-color: #19A7CE;
+  box-shadow: 0 4px 12px rgba(25, 167, 206, 0.1);
+}
+
+.modal-input:focus,
+.modal-select:focus {
+  outline: none;
+  border-color: #19A7CE;
+  box-shadow: 0 0 0 4px rgba(25, 167, 206, 0.15);
+  transform: translateY(-1px);
+}
+
+.modal-input::placeholder {
+  color: #9CA3AF;
+  opacity: 0.7;
+  font-style: italic;
+}
+
+/* Select specific */
+.modal-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2319A7CE'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1.25rem;
+  padding-right: 2.5rem;
+  cursor: pointer;
+}
+
+.modal-select option {
+  padding: 0.5rem;
+  font-weight: 500;
+}
+
+/* Modal Row (for date/time) */
+.modal-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+/* Modal Actions */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2.5rem;
+  border-top: 1px solid rgba(11, 79, 108, 0.1);
+  padding-top: 1.5rem;
+}
+
+/* Modal Buttons */
+.modal-btn {
+  padding: 0.875rem 2rem;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  min-width: 120px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* Cancel Button */
+.modal-btn-cancel {
+  color: #3F5468;
+  background: linear-gradient(135deg, #E9EEF2, #DCE5EB);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.modal-btn-cancel::before {
+  content: '×';
+  margin-right: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+
+.modal-btn-cancel::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(255,255,255,0.3), rgba(255,255,255,0));
+  transition: left 0.5s ease;
+}
+
+.modal-btn-cancel:hover {
+  background: linear-gradient(135deg, #DCE5EB, #CBD5E0);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  color: #0B4F6C;
+}
+
+.modal-btn-cancel:hover::before {
+  transform: rotate(90deg);
+}
+
+.modal-btn-cancel:hover::after {
+  left: 100%;
+}
+
+.modal-btn-cancel:active {
+  transform: translateY(0);
+}
+
+/* Submit Button */
+.modal-btn-submit {
+  color: white;
+  background: linear-gradient(135deg, #2D9A7A, #1E7B5E);
+  box-shadow: 0 8px 16px rgba(45, 154, 122, 0.2);
+  position: relative;
+}
+
+.modal-btn-submit::before {
+  content: '✓';
+  margin-right: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+
+.modal-btn-submit::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.5s, height 0.5s;
+}
+
+.modal-btn-submit:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 24px rgba(45, 154, 122, 0.3);
+  background: linear-gradient(135deg, #1E7B5E, #2D9A7A);
+}
+
+.modal-btn-submit:hover:not(:disabled)::before {
+  transform: scale(1.2);
+}
+
+.modal-btn-submit:hover:not(:disabled)::after {
+  width: 300px;
+  height: 300px;
+  opacity: 0;
+}
+
+.modal-btn-submit:active:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.modal-btn-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  background: linear-gradient(135deg, #9CA3AF, #6B7280);
+}
+
+/* Custom scrollbar for modal */
+.modal-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+  background: #E9EEF2;
+  border-radius: 3px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #19A7CE, #9B72AA);
+  border-radius: 3px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: #0B4F6C;
+}
+
+/* Empty state */
+.collections-empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+  border-radius: 1.5rem;
+  border: 2px dashed rgba(11, 79, 108, 0.2);
+  color: #647B8C;
+  animation: fadeIn 0.5s ease;
+}
+
+.collections-empty svg {
+  width: 4rem;
+  height: 4rem;
+  color: #DCE5EB;
+  margin-bottom: 1rem;
+}
+
+.collections-empty p {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.collections-empty-sub {
+  font-size: 0.875rem;
+  color: #9CA3AF;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .my-collections-header {
+    font-size: 1.5rem;
+    text-align: center;
+    display: block;
+  }
+
+  .my-collections-header::after {
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+  }
+
+  .modal-content {
+    padding: 1.5rem;
+    max-width: 500px;
+  }
+
+  .modal-title {
+    font-size: 1.5rem;
+  }
+
+  .modal-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .modal-actions {
+    flex-direction: column-reverse;
+    gap: 0.75rem;
+  }
+
+  .modal-btn {
+    width: 100%;
+  }
+
+  .disposal-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .my-collections-header {
+    font-size: 1.25rem;
+  }
+
+  .my-collections-header::after {
+    width: 50px;
+    height: 3px;
+  }
+
+  .modal-content {
+    padding: 1.25rem;
+    border-radius: 1.5rem;
+  }
+
+  .modal-title {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .modal-label {
+    font-size: 0.75rem;
+  }
+
+  .modal-input,
+  .modal-select,
+  .modal-field-readonly {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .modal-btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+  }
+
+  .disposal-btn {
+    padding: 0.375rem 0.875rem;
+    font-size: 0.75rem;
+    min-width: 100px;
+  }
+}
+
+/* Print styles */
+@media print {
+  .disposal-btn,
+  .modal-overlay {
+    display: none;
+  }
+
+  .my-collections-header {
+    -webkit-text-fill-color: #0B4F6C;
+    color: #0B4F6C;
+    background: none;
+  }
+
+  .my-collections-header::after {
+    background: #0B4F6C;
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .my-collections-header::after,
+  .dashboard-spinner,
+  .modal-content,
+  .modal-btn,
+  .modal-btn::before,
+  .modal-btn::after,
+  .disposal-btn,
+  .disposal-btn::before,
+  .disposal-btn::after {
+    animation: none;
+    transition: none;
+  }
+
+  .modal-btn:hover,
+  .disposal-btn:hover {
+    transform: none;
+  }
+
+  .dashboard-spinner {
+    border-top-color: #19A7CE;
+    border-right-color: #9B72AA;
+    border-bottom-color: #0B4F6C;
+  }
+}
+
+/* High contrast support */
+@media (prefers-contrast: high) {
+  .modal-input,
+  .modal-select {
+    border: 2px solid #0B4F6C;
+  }
+
+  .modal-btn-submit {
+    border: 2px solid #1E7B5E;
+  }
+
+  .disposal-btn {
+    border: 2px solid #1E7B5E;
+  }
+}
+
+/* Success animation for form submission */
+@keyframes successPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(45, 154, 122, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(45, 154, 122, 0);
+  }
+}
+
+.modal-btn-submit.success {
+  animation: successPulse 0.5s ease;
+}
+
+/* Tooltip for disposal button (optional) */
+.disposal-btn[data-tooltip] {
+  position: relative;
+}
+
+.disposal-btn[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0B4F6C;
+  color: white;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+/* Waste type badge customization */
+.status-badge.waste-type-yellow,
+.status-badge.waste-type-red,
+.status-badge.waste-type-white,
+.status-badge.waste-type-blue {
+  font-size: 0.8125rem;
+  padding: 0.375rem 1rem;
+}

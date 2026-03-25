@@ -5,6 +5,7 @@ import collectionService from '../../services/collectionService';
 import { useAuth } from '../../context/AuthContext';
 import { formatDateTime, formatQuantity } from '../../utils/helpers';
 import { ToastContainer, toast } from 'react-toastify';
+import '../../styles/PickupRequests.css';
 
 const PickupRequests = () => {
   const [requests, setRequests] = useState([]);
@@ -88,11 +89,11 @@ const PickupRequests = () => {
       key: 'actions',
       header: 'Actions',
       render: (_, record) => (
-        <div className="flex gap-2">
+        <div className="pickup-actions-group">
           {record.status === 'PENDING' && (
             <button
               onClick={() => handleAssign(record.id)}
-              className="px-3 py-1 text-xs font-medium text-white bg-brand-600 rounded hover:bg-brand-700"
+              className="pickup-action-btn"
             >
               Assign to Me
             </button>
@@ -100,7 +101,7 @@ const PickupRequests = () => {
           {record.status === 'SCHEDULED' && (
             <button
               onClick={() => handleComplete(record.id)}
-              className="px-3 py-1 text-xs font-medium text-white bg-green-600 rounded hover:bg-green-700"
+              className="pickup-action-btn pickup-action-btn-complete"
             >
               Mark Collected
             </button>
@@ -114,14 +115,14 @@ const PickupRequests = () => {
     <div>
       <ToastContainer position="top-right" autoClose={3000} />
       
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">
+      <div className="pickup-requests-header">
+        <h1 className="pickup-requests-title">
           Pickup Requests
         </h1>
         <select
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value)}
-          className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-brand-500 focus:border-brand-500 sm:text-sm"
+          className="pickup-requests-filter"
         >
           <option value="">All Statuses</option>
           <option value="PENDING">Pending</option>
@@ -131,8 +132,8 @@ const PickupRequests = () => {
       </div>
 
       {loading ? (
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-600"></div>
+        <div className="dashboard-loading">
+          <div className="dashboard-spinner"></div>
         </div>
       ) : (
         <DataTable
@@ -143,28 +144,28 @@ const PickupRequests = () => {
       )}
 
       {/* Summary */}
-      <div className="mt-6 bg-white rounded-lg shadow p-4">
-        <h3 className="text-sm font-medium text-gray-700 mb-2">Summary</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+      <div className="pickup-requests-summary">
+        <h3 className="pickup-requests-summary-title">Summary</h3>
+        <div className="pickup-requests-summary-grid">
           <div>
-            <span className="text-gray-500">Total Requests:</span>
-            <span className="ml-2 font-semibold">{filteredRequests.length}</span>
+            <span className="pickup-requests-summary-label">Total Requests:</span>
+            <span className="pickup-requests-summary-value">{filteredRequests.length}</span>
           </div>
           <div>
-            <span className="text-gray-500">Pending:</span>
-            <span className="ml-2 font-semibold text-yellow-600">
+            <span className="pickup-requests-summary-label">Pending:</span>
+            <span className="pickup-requests-summary-value pickup-requests-summary-pending">
               {filteredRequests.filter(r => r.status === 'PENDING').length}
             </span>
           </div>
           <div>
-            <span className="text-gray-500">Scheduled:</span>
-            <span className="ml-2 font-semibold text-purple-600">
+            <span className="pickup-requests-summary-label">Scheduled:</span>
+            <span className="pickup-requests-summary-value pickup-requests-summary-scheduled">
               {filteredRequests.filter(r => r.status === 'SCHEDULED').length}
             </span>
           </div>
           <div>
-            <span className="text-gray-500">Completed:</span>
-            <span className="ml-2 font-semibold text-green-600">
+            <span className="pickup-requests-summary-label">Completed:</span>
+            <span className="pickup-requests-summary-value pickup-requests-summary-completed">
               {filteredRequests.filter(r => r.status === 'COMPLETED').length}
             </span>
           </div>

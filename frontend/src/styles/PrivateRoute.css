@@ -1,0 +1,462 @@
+/* PrivateRoute.css - Biotech Theme for BioTrace */
+
+.private-route-loading {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0B4F6C 0%, #19A7CE 50%, #9B72AA 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animated background particles */
+.private-route-loading::before {
+  content: '';
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+  animation: rotate 20s linear infinite;
+  pointer-events: none;
+}
+
+.private-route-loading::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5 L55 30 L30 55 L5 30 Z' fill='none' stroke='rgba(255,255,255,0.05)' stroke-width='1'/%3E%3C/svg%3E");
+  opacity: 0.3;
+  animation: float 30s linear infinite;
+}
+
+/* Main spinner */
+.private-route-spinner {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  border: 4px solid rgba(255, 255, 255, 0.15);
+  border-top-color: #FFFFFF;
+  border-right-color: #19A7CE;
+  border-bottom-color: #9B72AA;
+  animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+  position: relative;
+  z-index: 10;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Inner spinner glow */
+.private-route-spinner::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  right: -8px;
+  bottom: -8px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  background: linear-gradient(135deg, #19A7CE, #9B72AA) border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.5;
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+/* Loading text */
+.private-route-loading-text {
+  position: absolute;
+  bottom: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 0.5rem 1.5rem;
+  border-radius: 9999px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  animation: fadeInOut 2s ease-in-out infinite;
+  white-space: nowrap;
+  z-index: 20;
+}
+
+/* DNA helix decoration */
+.dna-helix {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.dna-helix::before,
+.dna-helix::after {
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 100px;
+  background: linear-gradient(180deg, transparent, rgba(255,255,255,0.3), transparent);
+  animation: dnaFloat 6s ease-in-out infinite;
+}
+
+.dna-helix::before {
+  left: 20%;
+  top: -20%;
+  animation-delay: -2s;
+}
+
+.dna-helix::after {
+  right: 20%;
+  top: 20%;
+  animation-delay: -4s;
+}
+
+/* Floating dots */
+.loading-dot {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.3;
+  animation: floatDot 3s ease-in-out infinite;
+  z-index: 5;
+}
+
+.loading-dot:nth-child(1) {
+  top: 20%;
+  left: 30%;
+  animation-delay: 0s;
+}
+
+.loading-dot:nth-child(2) {
+  top: 60%;
+  right: 25%;
+  animation-delay: -1s;
+}
+
+.loading-dot:nth-child(3) {
+  bottom: 30%;
+  left: 40%;
+  animation-delay: -2s;
+}
+
+.loading-dot:nth-child(4) {
+  top: 40%;
+  right: 35%;
+  animation-delay: -1.5s;
+}
+
+.loading-dot:nth-child(5) {
+  bottom: 20%;
+  right: 45%;
+  animation-delay: -2.5s;
+}
+
+/* Loading progress bar */
+.private-route-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #19A7CE, #9B72AA, #19A7CE);
+  animation: progress 2s ease-in-out infinite;
+  width: 100%;
+  transform-origin: left;
+  z-index: 30;
+}
+
+/* Loading message container */
+.loading-message-container {
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 20;
+}
+
+.loading-message {
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  letter-spacing: 0.02em;
+}
+
+.loading-submessage {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.875rem;
+  font-weight: 400;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* BioTrace logo during loading */
+.loading-logo {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 5rem;
+  height: 5rem;
+  color: white;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.2));
+  animation: logoPulse 2s ease-in-out infinite;
+  z-index: 15;
+  opacity: 0.9;
+}
+
+/* Wave effect */
+.wave-bg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 30%;
+  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.1));
+  clip-path: path('M0,64 L60,64 L120,32 L180,64 L240,32 L300,64 L360,32 L420,64 L480,32 L540,64 L600,32 L660,64 L720,32 L780,64 L840,32 L900,64 L960,32 L1020,64 L1080,32 L1140,64 L1200,32 L1260,64 L1320,32 L1380,64 L1440,32 L1500,64 L1560,32 L1620,64 L1680,32 L1740,64 L1800,32 L1860,64 L1920,32 L1980,64 L2040,32 L2100,64 L2160,32 L2220,64 L2280,32 L2340,64 L2400,32 L2460,64 L2520,32 L2580,64 L2640,32 L2700,64 L2760,32 L2820,64 L2880,32 L2940,64 L3000,32 L3060,64 L3120,32 L3180,64 L3240,32 L3300,64 L3360,32 L3420,64 L3480,32 L3540,64 L3600,32 L3660,64 L3720,32 L3780,64 L3840,32 L3900,64 L3960,32 L4020,64 L4080,32 L4140,64 L4200,32 L4260,64 L4320,32 L4380,64 L4440,32 L4500,64 L4560,32 L4620,64 L4680,32 L4740,64 L4800,32 L4860,64 L4920,32 L4980,64 L5040,32 L5100,64 L5160,32 L5220,64 L5280,32 L5340,64 L5400,32 L5460,64 L5520,32 L5580,64 L5640,32 L5700,64 L5760,32 L5820,64 L5880,32 L5940,64 L6000,32 L6060,64 L6120,32 L6180,64 L6240,32 L6300,64 L6360,32 L6420,64 L6480,32 L6540,64 L6600,32 L6660,64 L6720,32 L6780,64 L6840,32 L6900,64 L6960,32 L7020,64 L7080,32 L7140,64 L7200,32 L7260,64 L7320,32 L7380,64 L7440,32 L7500,64 L7560,32 L7620,64 L7680,32 L7740,64 L7800,32 L7860,64 L7920,32 L7980,64 L8040,32 L8100,64 L8160,32 L8220,64 L8280,32 L8340,64 L8400,32 L8460,64 L8520,32 L8580,64 L8640,32 L8700,64 L8760,32 L8820,64 L8880,32 L8940,64 L9000,32 L9060,64 L9120,32 L9180,64 L9240,32 L9300,64 L9360,32 L9420,64 L9480,32 L9540,64 L9600,32 L9660,64 L9720,32 L9780,64 L9840,32 L9900,64 L9960,32 L10020,64 L10080,32 L10140,64 L10200,32 L10260,64 L10320,32 L10380,64 L10440,32 L10500,64 L10560,32 L10620,64 L10680,32 L10740,64 L10800,32 L10860,64 V128 H0 V64 Z');
+  animation: waveMove 10s linear infinite;
+  opacity: 0.15;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Animations */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes float {
+  from {
+    transform: translateY(0) translateX(0) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-10px) translateX(10px) rotate(120deg);
+  }
+  66% {
+    transform: translateY(10px) translateX(-10px) rotate(240deg);
+  }
+  to {
+    transform: translateY(0) translateX(0) rotate(360deg);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes fadeInOut {
+  0%, 100% {
+    opacity: 0.5;
+    transform: translateX(-50%) scale(0.95);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+@keyframes dnaFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-30px) rotate(180deg);
+    opacity: 0.8;
+  }
+  75% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-60px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes floatDot {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translateY(-20px) scale(1.5);
+    opacity: 0.6;
+  }
+}
+
+@keyframes progress {
+  0% {
+    transform: scaleX(0);
+    opacity: 1;
+  }
+  50% {
+    transform: scaleX(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scaleX(0);
+    transform-origin: right;
+    opacity: 1;
+  }
+}
+
+@keyframes logoPulse {
+  0%, 100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translateX(-50%) scale(1.1);
+    opacity: 1;
+  }
+}
+
+@keyframes waveMove {
+  from {
+    transform: translateX(0) translateY(0);
+  }
+  to {
+    transform: translateX(-50%) translateY(-10px);
+  }
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .private-route-spinner {
+    width: 4rem;
+    height: 4rem;
+    border-width: 3px;
+  }
+
+  .private-route-loading-text {
+    font-size: 0.75rem;
+    padding: 0.375rem 1rem;
+    bottom: 35%;
+  }
+
+  .loading-message {
+    font-size: 1rem;
+  }
+
+  .loading-submessage {
+    font-size: 0.75rem;
+  }
+
+  .loading-logo {
+    width: 4rem;
+    height: 4rem;
+    top: 32%;
+  }
+}
+
+@media (max-width: 480px) {
+  .private-route-spinner {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .private-route-loading-text {
+    font-size: 0.6875rem;
+    padding: 0.25rem 0.875rem;
+    white-space: normal;
+    text-align: center;
+    width: 80%;
+  }
+
+  .loading-message-container {
+    width: 90%;
+  }
+
+  .loading-message {
+    font-size: 0.875rem;
+  }
+
+  .loading-submessage {
+    font-size: 0.6875rem;
+  }
+
+  .loading-logo {
+    width: 3rem;
+    height: 3rem;
+    top: 35%;
+  }
+
+  .loading-dot {
+    width: 3px;
+    height: 3px;
+  }
+}
+
+/* Reduce motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .private-route-loading::before,
+  .private-route-loading::after,
+  .private-route-spinner,
+  .private-route-spinner::before,
+  .private-route-loading-text,
+  .loading-dot,
+  .dna-helix::before,
+  .dna-helix::after,
+  .loading-logo,
+  .wave-bg,
+  .private-route-progress,
+  .loading-message,
+  .loading-submessage {
+    animation: none;
+  }
+
+  .private-route-spinner {
+    border-top-color: #FFFFFF;
+    border-right-color: #FFFFFF;
+    border-bottom-color: #FFFFFF;
+  }
+
+  .wave-bg {
+    display: none;
+  }
+}
+
+/* Z-index layering to ensure proper visibility */
+.private-route-loading > * {
+  position: relative;
+}
+
+/* Ensure text is readable */
+.loading-message,
+.loading-submessage,
+.private-route-loading-text {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

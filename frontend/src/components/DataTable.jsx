@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../styles/DataTable.css';
 
 const DataTable = ({ columns, data, onRowClick, itemsPerPage = 10 }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -45,9 +46,9 @@ const DataTable = ({ columns, data, onRowClick, itemsPerPage = 10 }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow overflow-hidden">
+    <div className="datatable-container">
       {/* Search Bar */}
-      <div className="p-4 border-b border-gray-200">
+      <div className="datatable-search">
         <input
           type="text"
           placeholder="Search..."
@@ -56,22 +57,22 @@ const DataTable = ({ columns, data, onRowClick, itemsPerPage = 10 }) => {
             setSearchTerm(e.target.value);
             setCurrentPage(1);
           }}
-          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500"
+          className="datatable-search-input"
         />
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+      <div className="datatable-wrapper">
+        <table className="datatable">
+          <thead className="datatable-head">
             <tr>
               {columns.map((column) => (
                 <th
                   key={column.key}
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                  className="datatable-th"
                   onClick={() => column.sortable !== false && handleSort(column.key)}
                 >
-                  <div className="flex items-center gap-1">
+                  <div className="datatable-th-content">
                     {column.header}
                     {sortField === column.key && (
                       <span>{sortOrder === 'asc' ? '↑' : '↓'}</span>
@@ -81,10 +82,10 @@ const DataTable = ({ columns, data, onRowClick, itemsPerPage = 10 }) => {
               ))}
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="datatable-body">
             {paginatedData.length === 0 ? (
               <tr>
-                <td colSpan={columns.length} className="px-6 py-8 text-center text-gray-500">
+                <td colSpan={columns.length} className="datatable-empty">
                   No data available
                 </td>
               </tr>
@@ -92,11 +93,10 @@ const DataTable = ({ columns, data, onRowClick, itemsPerPage = 10 }) => {
               paginatedData.map((item, index) => (
                 <tr
                   key={item.id || index}
-                  onClick={() => onRowClick && onRowClick(item)}
-                  className={`${onRowClick ? 'cursor-pointer hover:bg-gray-50' : ''}`}
+                  className="datatable-row"
                 >
                   {columns.map((column) => (
-                    <td key={column.key} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td key={column.key} className="datatable-cell">
                       {getValue(item, column)}
                     </td>
                   ))}
@@ -109,23 +109,23 @@ const DataTable = ({ columns, data, onRowClick, itemsPerPage = 10 }) => {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="px-6 py-3 flex items-center justify-between border-t border-gray-200">
-          <div className="text-sm text-gray-700">
+        <div className="datatable-pagination">
+          <div className="datatable-pagination-info">
             Showing {startIndex + 1} to {Math.min(startIndex + itemsPerPage, sortedData.length)} of{' '}
             {sortedData.length} results
           </div>
-          <div className="flex gap-2">
+          <div className="datatable-pagination-buttons">
             <button
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className="px-3 py-1 border rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+              className="datatable-pagination-btn"
             >
               Previous
             </button>
             <button
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              className="px-3 py-1 border rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+              className="datatable-pagination-btn"
             >
               Next
             </button>

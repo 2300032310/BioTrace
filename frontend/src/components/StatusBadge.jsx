@@ -1,5 +1,6 @@
 import React from 'react';
 import { getStatusColor, getPriorityColor, getWasteTypeColor } from '../utils/helpers';
+import '../styles/StatusBadge.css';
 
 const StatusBadge = ({ status, type = 'waste_status' }) => {
   let badgeClass = '';
@@ -18,11 +19,11 @@ const StatusBadge = ({ status, type = 'waste_status' }) => {
       badgeClass = getWasteTypeColor(status);
       break;
     default:
-      badgeClass = 'bg-gray-100 text-gray-800';
+      badgeClass = 'status-default';
   }
 
   return (
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badgeClass}`}>
+    <span className={`status-badge ${badgeClass}`}>
       {status}
     </span>
   );
