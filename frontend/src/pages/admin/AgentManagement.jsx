@@ -15,7 +15,11 @@ const AgentManagement = () => {
   const fetchAgents = async () => {
     try {
       const response = await api.get('/users/role/COLLECTION_AGENCY');
-      setAgents(response.data);
+      // Sort newest first (newest at top)
+      const sorted = [...response.data].sort(
+        (a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0)
+      );
+      setAgents(sorted);
     } catch (error) {
       toast.error('Failed to fetch collection agents.');
     } finally {

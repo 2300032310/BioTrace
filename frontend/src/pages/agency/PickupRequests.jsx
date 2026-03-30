@@ -7,6 +7,8 @@ import { formatDateTime, formatQuantity } from '../../utils/helpers';
 import { ToastContainer, toast } from 'react-toastify';
 import '../../styles/PickupRequests.css';
 
+const STATUS_ORDER = { PENDING: 0, SCHEDULED: 1, COMPLETED: 2 };
+
 const PickupRequests = () => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,7 +22,12 @@ const PickupRequests = () => {
   const fetchRequests = async () => {
     try {
       const data = await collectionService.getAllCollectionRequests();
-      setRequests(data);
+      const sorted = [...data].sort((a, b) => {
+        const statusDiff = STATUS_ORDER[a.status] - STATUS_ORDER[b.status];
+        if (statusDiff !== 0) return statusDiff;
+        return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
+      });
+      setRequests(sorted);
     } catch (error) {
       toast.error('Failed to fetch pickup requests.');
     } finally {
@@ -56,10 +63,7 @@ const PickupRequests = () => {
   });
 
   const columns = [
-    {
-      key: 'hospitalName',
-      header: 'Hospital',
-    },
+    { key: 'hospitalName', header: 'Hospital' },
     {
       key: 'wasteType',
       header: 'Waste Type',
@@ -88,23 +92,21 @@ const PickupRequests = () => {
     {
       key: 'actions',
       header: 'Actions',
+      sortable: false,
       render: (_, record) => (
         <div className="pickup-actions-group">
           {record.status === 'PENDING' && (
-            <button
-              onClick={() => handleAssign(record.id)}
-              className="pickup-action-btn"
-            >
+            <button onClick={() => handleAssign(record.id)} className="pickup-action-btn">
               Assign to Me
             </button>
           )}
           {record.status === 'SCHEDULED' && (
-            <button
-              onClick={() => handleComplete(record.id)}
-              className="pickup-action-btn pickup-action-btn-complete"
-            >
+            <button onClick={() => handleComplete(record.id)} className="pickup-action-btn pickup-action-btn-complete">
               Mark Collected
             </button>
+          )}
+          {record.status === 'COMPLETED' && (
+            <span className="pickup-done-label">✓ Done</span>
           )}
         </div>
       ),
@@ -114,11 +116,8 @@ const PickupRequests = () => {
   return (
     <div>
       <ToastContainer position="top-right" autoClose={3000} />
-      
       <div className="pickup-requests-header">
-        <h1 className="pickup-requests-title">
-          Pickup Requests
-        </h1>
+        <h1 className="pickup-requests-title">Pickup Requests</h1>
         <select
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value)}
@@ -136,14 +135,9 @@ const PickupRequests = () => {
           <div className="dashboard-spinner"></div>
         </div>
       ) : (
-        <DataTable
-          columns={columns}
-          data={filteredRequests}
-          itemsPerPage={10}
-        />
+        <DataTable columns={columns} data={filteredRequests} itemsPerPage={10} />
       )}
 
-      {/* Summary */}
       <div className="pickup-requests-summary">
         <h3 className="pickup-requests-summary-title">Summary</h3>
         <div className="pickup-requests-summary-grid">

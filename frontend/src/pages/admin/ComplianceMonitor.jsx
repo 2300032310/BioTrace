@@ -19,7 +19,11 @@ const ComplianceMonitor = () => {
   const fetchWasteRecords = async () => {
     try {
       const data = await wasteService.getAllWaste();
-      setWasteRecords(Array.isArray(data) ? data : []);
+      // Sort by createdAt descending (newest first)
+      const sortedData = Array.isArray(data) 
+        ? data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) 
+        : [];
+      setWasteRecords(sortedData);
     } catch (error) {
       console.error('Error fetching waste records:', error);
       toast.error('Failed to fetch waste records.');
@@ -31,8 +35,8 @@ const ComplianceMonitor = () => {
 
   const filteredRecords = wasteRecords.filter((record) => {
     if (filterHospital && record.hospitalId?.toString() !== filterHospital) return false;
-    if (filterViolation === 'violation' && !isViolation(record.createdAt)) return false;
-    if (filterViolation === 'compliant' && isViolation(record.createdAt)) return false;
+    if (filterViolation === 'violation' && !isViolation(record)) return false;
+    if (filterViolation === 'compliant' && isViolation(record)) return false;
     return true;
   });
 
@@ -62,9 +66,9 @@ const ComplianceMonitor = () => {
     {
       key: 'createdAt',
       header: 'Time Elapsed',
-      render: (value) => {
-        const elapsed = getTimeElapsed(value);
-        const violation = isViolation(value);
+      render: (value, record) => {
+        const elapsed = getTimeElapsed(record.generationDate || value);
+        const violation = isViolation(record);
         return (
           <div className="time-elapsed">
             <span className={violation ? 'time-elapsed-value time-elapsed-value-violation' : 'time-elapsed-value time-elapsed-value-normal'}>
@@ -86,7 +90,7 @@ const ComplianceMonitor = () => {
     },
   ];
 
-  const violations = wasteRecords.filter(r => isViolation(r.createdAt));
+  const violations = wasteRecords.filter(r => isViolation(r));
   const complianceRate = wasteRecords.length > 0 
     ? Math.round(((wasteRecords.length - violations.length) / wasteRecords.length) * 100)
     : 100;

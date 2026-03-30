@@ -84,13 +84,31 @@ export const getTimeElapsed = (dateString) => {
   return `${diffHours} hour${diffHours > 1 ? 's' : ''}`;
 };
 
-// Check if violation (> 48 hours)
-export const isViolation = (dateString) => {
-  if (!dateString) return false;
-  const date = new Date(dateString);
+// Check if violation (> 48 hours pending)
+export const isViolation = (record) => {
+  // If already disposed, it's not a violation
+  if (record.status === 'DISPOSED' || record.status === 'COLLECTED') {
+    return false;
+  }
+  
+  // Only pending records can be violations
+  if (record.status !== 'PENDING') {
+    return false;
+  }
+  
+  // Check generation date (when waste was actually generated)
+  const generationDate = record.generationDate;
+  if (!generationDate) return false;
+  
+  // Parse the generation date - handle both date and datetime formats
+  const genDate = new Date(generationDate);
+  if (isNaN(genDate.getTime())) return false;
+  
   const now = new Date();
-  const diffMs = now - date;
+  const diffMs = now - genDate;
   const diffHours = diffMs / (1000 * 60 * 60);
+  
+  // Violation if pending for more than 48 hours since generation
   return diffHours > 48;
 };
 

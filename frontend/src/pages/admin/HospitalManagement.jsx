@@ -27,7 +27,11 @@ const HospitalManagement = () => {
   const fetchHospitals = async () => {
     try {
       const data = await hospitalService.getAllHospitals();
-      setHospitals(data);
+      // Sort newest first (newest at top)
+      const sorted = [...data].sort(
+        (a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0)
+      );
+      setHospitals(sorted);
     } catch (error) {
       toast.error('Failed to fetch hospitals.');
     } finally {

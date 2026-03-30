@@ -1,15 +1,25 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import Sidebar from '../../components/Sidebar';
 import HospitalManagement from './HospitalManagement';
 import ComplianceMonitor from './ComplianceMonitor';
 import AgentManagement from './AgentManagement';
 import hospitalService from '../../services/hospitalService';
-import { wasteService } from '../../services/wasteService';
 import { ToastContainer, toast } from 'react-toastify';
 
 const AdminDashboard = () => {
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const getTabFromPath = (path) => {
+    if (path.includes('hospitals')) return 'hospitals';
+    if (path.includes('agents')) return 'agents';
+    if (path.includes('compliance')) return 'compliance';
+    return 'dashboard';
+  };
+
+  const [activeTab, setActiveTab] = useState(() => getTabFromPath(location.pathname));
   const [stats, setStats] = useState({
     totalHospitals: 0,
     totalWasteThisMonth: 0,
@@ -19,17 +29,18 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setActiveTab(getTabFromPath(location.pathname));
+  }, [location.pathname]);
+
+  useEffect(() => {
     const fetchStats = async () => {
       try {
-        const [hospitalData, wasteData] = await Promise.all([
-          hospitalService.getHospitalStats(),
-          wasteService.getWasteStats(),
-        ]);
+        const hospitalData = await hospitalService.getHospitalStats();
         setStats({
-          totalHospitals: hospitalData.total || 0,
-          totalWasteThisMonth: wasteData.totalWasteThisMonth || 0,
-          complianceRate: wasteData.complianceRate || 0,
-          violationsCount: wasteData.violationsCount || 0,
+          totalHospitals: hospitalData.totalHospitals || 0,
+          totalWasteThisMonth: hospitalData.totalWasteThisMonth || 0,
+          complianceRate: hospitalData.complianceRate || 0,
+          violationsCount: hospitalData.violations || 0,
         });
       } catch (error) {
         console.error('Failed to fetch stats:', error);
@@ -41,11 +52,16 @@ const AdminDashboard = () => {
   }, []);
 
   const tabs = [
-    { id: 'dashboard', label: 'Dashboard' },
-    { id: 'hospitals', label: 'Hospitals' },
-    { id: 'agents', label: 'Collection Agents' },
-    { id: 'compliance', label: 'Compliance' },
+    { id: 'dashboard', label: 'Dashboard', path: '/admin/dashboard' },
+    { id: 'hospitals', label: 'Hospitals', path: '/admin/hospitals' },
+    { id: 'agents', label: 'Collection Agents', path: '/admin/agents' },
+    { id: 'compliance', label: 'Compliance', path: '/admin/compliance' },
   ];
+
+  const handleTabChange = (tabId, tabPath) => {
+    setActiveTab(tabId);
+    navigate(tabPath);
+  };
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -62,7 +78,7 @@ const AdminDashboard = () => {
                 {tabs.map((tab) => (
                   <button
                     key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
+                    onClick={() => handleTabChange(tab.id, tab.path)}
                     className={`${
                       activeTab === tab.id
                         ? 'border-brand-500 text-brand-600'
@@ -157,7 +173,7 @@ const AdminDashboard = () => {
               <div className="mt-8">
                 <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <button onClick={() => setActiveTab('hospitals')}
+                  <button onClick={() => handleTabChange('hospitals', '/admin/hospitals')}
                     className="flex items-center p-4 bg-white rounded-lg shadow hover:shadow-md transition-shadow">
                     <div className="p-2 rounded-full bg-brand-100 text-brand-600 mr-4">
                       <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -167,7 +183,7 @@ const AdminDashboard = () => {
                     <span className="font-medium text-gray-900">Add Hospital</span>
                   </button>
 
-                  <button onClick={() => setActiveTab('agents')}
+                  <button onClick={() => handleTabChange('agents', '/admin/agents')}
                     className="flex items-center p-4 bg-white rounded-lg shadow hover:shadow-md transition-shadow">
                     <div className="p-2 rounded-full bg-blue-100 text-blue-600 mr-4">
                       <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -178,7 +194,7 @@ const AdminDashboard = () => {
                     <span className="font-medium text-gray-900">View Collection Agents</span>
                   </button>
 
-                  <button onClick={() => setActiveTab('compliance')}
+                  <button onClick={() => handleTabChange('compliance', '/admin/compliance')}
                     className="flex items-center p-4 bg-white rounded-lg shadow hover:shadow-md transition-shadow">
                     <div className="p-2 rounded-full bg-red-100 text-red-600 mr-4">
                       <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

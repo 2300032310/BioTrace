@@ -26,7 +26,14 @@ const WasteRecords = () => {
     try {
       setLoading(true);
       const data = await wasteService.getWasteByHospital(user.hospitalId);
-      setRecords(Array.isArray(data) ? data : []);
+      const records = Array.isArray(data) ? data : [];
+
+      // Sort oldest first (newest at bottom)
+      const sorted = [...records].sort(
+        (a, b) => new Date(a.createdAt || 0) - new Date(b.createdAt || 0)
+      );
+
+      setRecords(sorted);
     } catch (error) {
       console.error('Error fetching records:', error);
       toast.error('Failed to fetch waste records');
@@ -96,17 +103,13 @@ const WasteRecords = () => {
     <div>
       <ToastContainer position="top-right" autoClose={3000} />
 
-      <h1 className="waste-records-header">
-        My Waste Records
-      </h1>
+      <h1 className="waste-records-header">My Waste Records</h1>
 
       {/* Filters */}
       <div className="waste-records-filters">
         <div className="waste-records-filters-inner">
           <div className="waste-records-filter">
-            <label htmlFor="status" className="waste-records-filter-label">
-              Status
-            </label>
+            <label htmlFor="status" className="waste-records-filter-label">Status</label>
             <select
               id="status"
               name="status"
@@ -121,9 +124,7 @@ const WasteRecords = () => {
             </select>
           </div>
           <div className="waste-records-filter">
-            <label htmlFor="wasteType" className="waste-records-filter-label">
-              Waste Type
-            </label>
+            <label htmlFor="wasteType" className="waste-records-filter-label">Waste Type</label>
             <select
               id="wasteType"
               name="wasteType"
@@ -155,11 +156,7 @@ const WasteRecords = () => {
           <div className="dashboard-spinner"></div>
         </div>
       ) : (
-        <DataTable
-          columns={columns}
-          data={filteredRecords}
-          itemsPerPage={10}
-        />
+        <DataTable columns={columns} data={filteredRecords} itemsPerPage={10} />
       )}
 
       {/* Summary */}

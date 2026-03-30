@@ -10,6 +10,7 @@ import '../../styles/MyCollections.css';
 
 const MyCollections = () => {
   const [collections, setCollections] = useState([]);
+  const [disposedIds, setDisposedIds] = useState(new Set());
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [selectedCollection, setSelectedCollection] = useState(null);
@@ -20,7 +21,6 @@ const MyCollections = () => {
     disposalTime: new Date().toTimeString().slice(0, 5),
   });
   const [submitting, setSubmitting] = useState(false);
-  const { user } = useAuth();
 
   useEffect(() => {
     fetchCollections();
@@ -29,8 +29,19 @@ const MyCollections = () => {
   const fetchCollections = async () => {
     try {
       const data = await collectionService.getAllCollectionRequests();
-      // Filter for completed collections that haven't been disposed yet
-      setCollections(data.filter(c => c.status === 'COMPLETED'));
+      const completed = data.filter(c => c.status === 'COMPLETED');
+      const sorted = [...completed].sort(
+        (a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0)
+      );
+      setCollections(sorted);
+
+      try {
+        const disposals = await disposalService.getAllDisposals();
+        const disposedSet = new Set(disposals.map(d => d.wasteRecordId));
+        setDisposedIds(disposedSet);
+      } catch {
+        setDisposedIds(new Set());
+      }
     } catch (error) {
       toast.error('Failed to fetch collections.');
     } finally {
@@ -40,45 +51,35 @@ const MyCollections = () => {
 
   const handleLogDisposal = (collection) => {
     setSelectedCollection(collection);
+    setDisposalForm({
+      disposalMethod: 'INCINERATION',
+      disposalFacility: '',
+      disposalDate: new Date().toISOString().split('T')[0],
+      disposalTime: new Date().toTimeString().slice(0, 5),
+    });
     setShowModal(true);
   };
 
   const handleDisposalChange = (e) => {
-    setDisposalForm({
-      ...disposalForm,
-      [e.target.name]: e.target.value,
-    });
+    setDisposalForm({ ...disposalForm, [e.target.name]: e.target.value });
   };
 
   const handleSubmitDisposal = async (e) => {
     e.preventDefault();
     setSubmitting(true);
-
     try {
-      // Combine date and time into DateTime format
       const disposalDateTime = `${disposalForm.disposalDate}T${disposalForm.disposalTime}:00`;
-      
       const disposalData = {
         wasteRecordId: selectedCollection.wasteRecordId,
         disposalMethod: disposalForm.disposalMethod,
         disposalFacility: disposalForm.disposalFacility,
         disposalDate: disposalDateTime,
       };
-
       await disposalService.createDisposal(disposalData);
       toast.success('Disposal logged successfully!');
       setShowModal(false);
-      fetchCollections();
-      
-      // Reset form
-      setDisposalForm({
-        disposalMethod: 'INCINERATION',
-        disposalFacility: '',
-        disposalDate: new Date().toISOString().split('T')[0],
-        disposalTime: new Date().toTimeString().slice(0, 5),
-      });
+      setDisposedIds(prev => new Set([...prev, selectedCollection.wasteRecordId]));
     } catch (error) {
-      console.error('Disposal error:', error);
       toast.error(error.response?.data?.message || 'Failed to log disposal.');
     } finally {
       setSubmitting(false);
@@ -86,10 +87,7 @@ const MyCollections = () => {
   };
 
   const columns = [
-    {
-      key: 'hospitalName',
-      header: 'Hospital',
-    },
+    { key: 'hospitalName', header: 'Hospital' },
     {
       key: 'wasteType',
       header: 'Waste Type',
@@ -108,72 +106,67 @@ const MyCollections = () => {
     {
       key: 'status',
       header: 'Status',
-      render: (value) => <StatusBadge status={value} type="request_status" />,
+      render: (_, record) => {
+        const isDisposed = disposedIds.has(record.wasteRecordId);
+        if (isDisposed) {
+          return <span className="collection-verified-badge">✓ VERIFIED</span>;
+        }
+        return <StatusBadge status={record.status} type="request_status" />;
+      },
     },
     {
       key: 'actions',
       header: 'Actions',
-      render: (_, record) => (
-        <button
-          onClick={() => handleLogDisposal(record)}
-          className="disposal-btn"
-        >
-          Log Disposal
-        </button>
-      ),
+      sortable: false,
+      render: (_, record) => {
+        const isDisposed = disposedIds.has(record.wasteRecordId);
+        if (isDisposed) {
+          return (
+            <button className="disposal-btn disposal-btn-done" disabled>
+              ✓ Disposed
+            </button>
+          );
+        }
+        return (
+          <button
+            onClick={() => handleLogDisposal(record)}
+            className="disposal-btn disposal-btn-pending"
+          >
+            Log Disposal
+          </button>
+        );
+      },
     },
   ];
 
   return (
     <div>
       <ToastContainer position="top-right" autoClose={3000} />
-      
-      <h1 className="my-collections-header">
-        My Collections (Ready for Disposal)
-      </h1>
+      <h1 className="my-collections-header">My Collections (Ready for Disposal)</h1>
 
       {loading ? (
         <div className="dashboard-loading">
           <div className="dashboard-spinner"></div>
         </div>
       ) : (
-        <DataTable
-          columns={columns}
-          data={collections}
-          itemsPerPage={10}
-        />
+        <DataTable columns={columns} data={collections} itemsPerPage={10} />
       )}
 
-      {/* Disposal Modal */}
       {showModal && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <h2 className="modal-title">
-              Log Disposal
-            </h2>
+            <h2 className="modal-title">Log Disposal</h2>
             <form onSubmit={handleSubmitDisposal} className="modal-form">
               <div className="modal-field">
-                <label className="modal-label">
-                  Waste Type
-                </label>
-                <div className="modal-field-readonly">
-                  {selectedCollection?.wasteType}
-                </div>
+                <label className="modal-label">Waste Type</label>
+                <div className="modal-field-readonly">{selectedCollection?.wasteType}</div>
               </div>
-
               <div className="modal-field">
-                <label className="modal-label">
-                  Quantity (kg)
-                </label>
-                <div className="modal-field-readonly">
-                  {formatQuantity(selectedCollection?.quantityKg)}
-                </div>
+                <label className="modal-label">Quantity (kg)</label>
+                <div className="modal-field-readonly">{formatQuantity(selectedCollection?.quantityKg)}</div>
               </div>
-
               <div className="modal-field">
-                <label htmlFor="disposalMethod" className="modal-label">
-                  Disposal Method
-                </label>
+                <label htmlFor="disposalMethod" className="modal-label">Disposal Method</label>
                 <select
                   id="disposalMethod"
                   name="disposalMethod"
@@ -186,11 +179,8 @@ const MyCollections = () => {
                   ))}
                 </select>
               </div>
-
               <div className="modal-field">
-                <label htmlFor="disposalFacility" className="modal-label">
-                  Disposal Facility
-                </label>
+                <label htmlFor="disposalFacility" className="modal-label">Disposal Facility</label>
                 <input
                   id="disposalFacility"
                   name="disposalFacility"
@@ -202,12 +192,9 @@ const MyCollections = () => {
                   placeholder="Enter facility name"
                 />
               </div>
-
               <div className="modal-row">
                 <div className="modal-field">
-                  <label htmlFor="disposalDate" className="modal-label">
-                    Disposal Date
-                  </label>
+                  <label htmlFor="disposalDate" className="modal-label">Disposal Date</label>
                   <input
                     id="disposalDate"
                     name="disposalDate"
@@ -219,9 +206,7 @@ const MyCollections = () => {
                   />
                 </div>
                 <div className="modal-field">
-                  <label htmlFor="disposalTime" className="modal-label">
-                    Disposal Time
-                  </label>
+                  <label htmlFor="disposalTime" className="modal-label">Disposal Time</label>
                   <input
                     id="disposalTime"
                     name="disposalTime"
@@ -233,20 +218,11 @@ const MyCollections = () => {
                   />
                 </div>
               </div>
-
               <div className="modal-actions">
-                <button
-                  type="button"
-                  onClick={() => setShowModal(false)}
-                  className="modal-btn modal-btn-cancel"
-                >
+                <button type="button" onClick={() => setShowModal(false)} className="modal-btn modal-btn-cancel">
                   Cancel
                 </button>
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="modal-btn modal-btn-submit"
-                >
+                <button type="submit" disabled={submitting} className="modal-btn modal-btn-submit">
                   {submitting ? 'Submitting...' : 'Submit'}
                 </button>
               </div>

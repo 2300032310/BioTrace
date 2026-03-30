@@ -43,7 +43,14 @@ public class CollectionRequestController {
     @GetMapping
     public ResponseEntity<List<CollectionRequestResponse>> getAllCollectionRequests(Authentication authentication) {
         try {
-            List<CollectionRequest> requests = collectionRequestService.getAllCollectionRequests(null);
+            // Get current user from authentication
+            String email = authentication.getName();
+            System.out.println("DEBUG controller: email=" + email);
+            User currentUser = collectionRequestService.getUserByEmail(email);
+            System.out.println("DEBUG controller: user=" + currentUser.getEmail() + ", role=" + currentUser.getRole());
+            
+            List<CollectionRequest> requests = collectionRequestService.getAllCollectionRequests(currentUser);
+            System.out.println("DEBUG controller: fetched " + requests.size() + " requests");
             
             // Map to response with joined data
             List<CollectionRequestResponse> responseList = requests.stream()
@@ -52,6 +59,7 @@ public class CollectionRequestController {
             
             return ResponseEntity.ok().body(responseList);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().body(null);
         }
     }
